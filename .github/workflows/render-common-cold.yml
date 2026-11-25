@@ -32,7 +32,7 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm install
       - name: Install voice generation dependencies
-        run: python -m pip install --upgrade edge-tts mutagen
+        run: python -m pip install --upgrade edge-tts mutagen gTTS
       - name: Generate Egyptian Arabic narration, captions and sound effects
         run: python scripts/generate_common_cold.py
       - name: Prepare output directory
