@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Place uploaded source video
+        run: |
+          mkdir -p public
+          cp ../8231084510492384771.mp4 public/input.mp4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
