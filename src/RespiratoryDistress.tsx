@@ -1,5 +1,6 @@
 import React from 'react';
-import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {SCENE_DURATIONS} from './generated-timing';
 
 type Scene = {title:string; sub:string; caption:string; kind:string; accent:string};
 const scenes:Scene[] = [
@@ -40,24 +41,27 @@ const Visual:React.FC<{kind:string;accent:string;frame:number}> = ({kind,accent,
  </svg>;
 };
 export const BreastfeedingNewborn:React.FC=()=>{
- const frame=useCurrentFrame(); const sceneFrames=112.5; const overlap=7;
+ const frame=useCurrentFrame(); const overlap=7;
+ const sceneStarts=SCENE_DURATIONS.map((_,i)=>SCENE_DURATIONS.slice(0,i).reduce((a,b)=>a+b,0));
  return <AbsoluteFill style={{background:'#071827',fontFamily:'Arial, sans-serif',color:'#F4FAFD',overflow:'hidden'}}>
-  <Audio src={staticFile('narration-ar.mp3')} />
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 38%, #153B50 0%, #071827 68%)'}}/>
   <div style={{position:'absolute',top:62,left:48,right:48,display:'flex',justifyContent:'space-between',fontSize:21,letterSpacing:2,color:'#9DB9C8'}}><span>NEWBORN CARE</span><span>تثقيف طبي</span></div>
   {scenes.map((s,i)=>{
-   const start=Math.round(i*sceneFrames); const local=frame-start;
+   const start=sceneStarts[i]; const sceneFrames=SCENE_DURATIONS[i]; const local=frame-start;
    const opacity=interpolate(local,[0,overlap,sceneFrames-overlap,sceneFrames],[0,1,1,0],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
    const y=interpolate(local,[0,sceneFrames],[38,-18],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
    if(frame<start-overlap||frame>start+sceneFrames) return null;
-   return <AbsoluteFill key={i} style={{opacity,justifyContent:'center',alignItems:'center',padding:'105px 58px 235px',transform:`translateY(${y}px)`}}>
+   return <React.Fragment key={i}>
+    <Sequence from={start} durationInFrames={sceneFrames}><Audio src={staticFile(`narration/scene-${String(i+1).padStart(2,'0')}.mp3`)} /></Sequence>
+    <AbsoluteFill style={{opacity,justifyContent:'center',alignItems:'center',padding:'105px 58px 235px',transform:`translateY(${y}px)`}}>
     <div style={{width:'100%',height:570,marginBottom:28}}><Visual kind={s.kind} accent={s.accent} frame={local}/></div>
     <div style={{fontSize:24,fontWeight:800,letterSpacing:2,color:s.accent,marginBottom:20}}>المشهد {String(i+1).padStart(2,'0')} / 20</div>
     <div dir="rtl" style={{fontSize:53,lineHeight:1.2,fontWeight:900,textAlign:'center',maxWidth:900}}>{s.title}</div>
     <div dir="rtl" style={{fontSize:30,lineHeight:1.45,textAlign:'center',color:'#B9D0DC',marginTop:22,maxWidth:870}}>{s.sub}</div>
     <div dir="rtl" style={{position:'absolute',bottom:65,left:42,right:42,minHeight:105,padding:'18px 24px',borderRadius:22,background:'rgba(3,14,24,.88)',border:'1px solid rgba(77,225,210,.35)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:27,lineHeight:1.4,textAlign:'center',fontWeight:700,color:'#FFFFFF'}}>{s.caption}</div>
-   </AbsoluteFill>;
+   </AbsoluteFill>
+   </React.Fragment>;
   })}
-  <div style={{position:'absolute',bottom:28,left:48,right:48,height:5,background:'#244252',borderRadius:10,overflow:'hidden'}}><div style={{height:'100%',width:`${(frame/2249)*100}%`,background:'#4DE1D2'}}/></div>
+  <div style={{position:'absolute',bottom:28,left:48,right:48,height:5,background:'#244252',borderRadius:10,overflow:'hidden'}}><div style={{height:'100%',width:`${(frame/Math.max(1,SCENE_DURATIONS.reduce((a,b)=>a+b,0)-1))*100}%`,background:'#4DE1D2'}}/></div>
  </AbsoluteFill>;
 };
