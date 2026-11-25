@@ -1,10 +1,13 @@
 {
-  "name": "breastfeeding-newborn-video",
-  "version": "1.0.0",
+  "name": "medical-animation",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "start": "remotion studio src/index.ts",
     "voice": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip edge-tts mutagen && .venv/bin/python scripts/generate_voice.py",
+    "common-cold:voice": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip edge-tts mutagen && .venv/bin/python scripts/generate_common_cold.py",
+    "common-cold:render": "npm run common-cold:voice && remotion render src/index.ts CommonCold out/common-cold.mp4",
+    "common-cold:preview": "remotion studio src/index.ts",
     "build": "npm run voice && remotion render src/index.ts BreastfeedingNewborn out/breastfeeding-newborn.mp4"
   },
   "dependencies": {
