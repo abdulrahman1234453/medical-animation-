@@ -77,6 +77,6 @@ export const CommonCold:React.FC=()=>{
   </AbsoluteFill>
   <div style={{position:'absolute',bottom:88,left:55,right:55,display:'flex',justifyContent:'space-between',fontSize:19,color:C.muted,fontWeight:700}}><span>COMMON COLD</span><span>{String(index+1).padStart(2,'0')} / {scenes.length}</span></div>
   <div style={{position:'absolute',bottom:48,left:55,right:55,height:6,background:'#244456',borderRadius:9,overflow:'hidden'}}><div style={{height:'100%',width:`${progress}%`,background:s.danger?C.red:C.cyan}}/></div>
-  <Sequence from={starts[index]||0} durationInFrames={duration}><Audio src={staticFile(`common-cold-audio/scene-${String(index+1).padStart(2,'0')}.mp3`)}/></Sequence>
+  <Sequence from={starts[index]||0} durationInFrames={duration}><><Audio src={staticFile(`common-cold-audio/scene-${String(index+1).padStart(2,'0')}.mp3`)}/><Audio src={staticFile("common-cold-audio/whoosh.wav")} volume={0.18}/>{s.danger&&<Audio src={staticFile("common-cold-audio/alert.wav")} volume={0.22}/>}</></Sequence>
  </AbsoluteFill>;
 };
