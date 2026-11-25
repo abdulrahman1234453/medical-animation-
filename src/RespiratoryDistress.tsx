@@ -46,7 +46,7 @@ const Visual:React.FC<{kind:string;accent:string;frame:number}> = ({kind,accent,
 };
 export const NeonatalRespiratoryDistress:React.FC=()=>{
  const frame=useCurrentFrame(); const {fps}=useVideoConfig();
- const sceneFrames=67.5; const overlap=7;
+ const sceneFrames=112.5; const overlap=7;
  return <AbsoluteFill style={{background:'#071827',fontFamily:'Arial, sans-serif',color:'#F4FAFD',overflow:'hidden'}}>
   <Audio src={staticFile('narration-ar.mp3')} />
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 38%, #153B50 0%, #071827 68%)'}}/>
@@ -63,6 +63,6 @@ export const NeonatalRespiratoryDistress:React.FC=()=>{
     <div style={{fontSize:31,lineHeight:1.4,textAlign:'center',color:'#B9D0DC',marginTop:28,maxWidth:850}}>{s.sub}</div>
    </AbsoluteFill>;
   })}
-  <div style={{position:'absolute',bottom:65,left:64,right:64,height:6,background:'#244252',borderRadius:10,overflow:'hidden'}}><div style={{height:'100%',width:`${(frame/1349)*100}%`,background:'#4DE1D2'}}/></div>
+  <div style={{position:'absolute',bottom:65,left:64,right:64,height:6,background:'#244252',borderRadius:10,overflow:'hidden'}}><div style={{height:'100%',width:`${(frame/2249)*100}%`,background:'#4DE1D2'}}/></div>
  </AbsoluteFill>;
 };
