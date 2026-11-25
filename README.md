@@ -1,27 +1,25 @@
-# Neonatal Respiratory Distress — Remotion video
+# Breastfeeding in Newborns — Remotion video
 
-A 75-second, 9:16 educational medical motion-graphics composition with 20 animated scenes and Arabic narration.
+A 75-second, 9:16 educational medical motion-graphics composition with 20 animated scenes, Egyptian Arabic male narration, transitions, and on-screen captions.
 
 ## Requirements
 - Node.js and npm
 - Python 3
-- Internet connection for the free Microsoft Edge TTS voice service (no API key required)
+- Internet connection for Microsoft Edge TTS (no API key required)
 
-## Run the preview
+## Run preview
 ```bash
 npm install
 npm run start
 ```
 
-## Render the final MP4 with generated Arabic narration
+## Render final MP4 with generated Egyptian Arabic male narration
 ```bash
 npm run build
 ```
 
-The build command installs the Python `edge-tts` package if needed, reads `NARRATION_AR.txt`, generates an Egyptian Arabic male narration using `ar-EG-ShakirNeural`, saves it to `public/narration-ar.mp3`, and then renders the video with the audio track.
+The build generates `public/narration-ar.mp3` using Edge TTS voice `ar-EG-ShakirNeural`, then renders `out/breastfeeding-newborn.mp4`.
 
-Composition: `NeonatalRespiratoryDistress` — 1080×1920, 30 fps, 2250 frames (75 seconds).
+Composition: `BreastfeedingNewborn` — 1080×1920, 30 fps, 2250 frames (75 seconds).
 
-If Python blocks a user-level package install in your environment, install `edge-tts` in a Python virtual environment and rerun `npm run build`.
-
-Educational content only. Clinical management must follow local neonatal protocols and specialist assessment.
+Educational content only. Individual feeding plans and newborn assessment should follow clinical assessment and local protocols.
