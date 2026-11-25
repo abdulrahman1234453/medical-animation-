@@ -15,7 +15,7 @@ def load_lines():
     lines = []
     for line in SOURCE.read_text(encoding="utf-8").splitlines():
         line = line.strip()
-        if not line or line.startswith("سكريبت التعليق الصوتي") or line.startswith("ملاحظة:"):
+        if not line or line.startswith("سكريبت التعليق الصوتي") or line.startswith("ملاحظة"):
             continue
         lines.append(line)
     if len(lines) != 20:
