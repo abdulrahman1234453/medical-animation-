@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame} from 'remotion';
-import {SCENE_DURATIONS} from './generated-timing';
+import {SCENE_DURATIONS, SCENE_NARRATION} from './generated-timing';
 
 type Scene = {title:string; sub:string; caption:string; kind:string; accent:string};
 const scenes:Scene[] = [
@@ -58,7 +58,7 @@ export const BreastfeedingNewborn:React.FC=()=>{
     <div style={{fontSize:24,fontWeight:800,letterSpacing:2,color:s.accent,marginBottom:20}}>المشهد {String(i+1).padStart(2,'0')} / 20</div>
     <div dir="rtl" style={{fontSize:53,lineHeight:1.2,fontWeight:900,textAlign:'center',maxWidth:900}}>{s.title}</div>
     <div dir="rtl" style={{fontSize:30,lineHeight:1.45,textAlign:'center',color:'#B9D0DC',marginTop:22,maxWidth:870}}>{s.sub}</div>
-    <div dir="rtl" style={{position:'absolute',bottom:65,left:42,right:42,minHeight:105,padding:'18px 24px',borderRadius:22,background:'rgba(3,14,24,.88)',border:'1px solid rgba(77,225,210,.35)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:27,lineHeight:1.4,textAlign:'center',fontWeight:700,color:'#FFFFFF'}}>{s.caption}</div>
+    <div dir="rtl" style={{position:'absolute',bottom:65,left:42,right:42,minHeight:105,padding:'18px 24px',borderRadius:22,background:'rgba(3,14,24,.88)',border:'1px solid rgba(77,225,210,.35)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:25,lineHeight:1.35,textAlign:'center',fontWeight:700,color:'#FFFFFF'}}>{SCENE_NARRATION[i]}</div>
    </AbsoluteFill>
    </React.Fragment>;
   })}
