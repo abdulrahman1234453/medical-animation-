@@ -1,13 +1,13 @@
 from pathlib import Path
-import asyncio, json, edge_tts, math, wave, struct
+import asyncio, json, math, wave, struct, time
 from mutagen.mp3 import MP3
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "NARRATION_COMMON_COLD_AR.txt"
 OUT = ROOT / "public" / "common-cold-audio"
 TIMING = ROOT / "src" / "common-cold-timing.ts"
-VOICE = "ar-EG-ShakirNeural"
 FPS = 60
+EDGE_VOICES = ["ar-EG-ShakirNeural", "ar-EG-SalmaNeural"]
 
 def make_tone(path, freqs, seconds, volume=0.16, sweep=False):
     rate = 44100
@@ -26,6 +26,30 @@ def make_tone(path, freqs, seconds, volume=0.16, sweep=False):
             frames.extend(struct.pack("<h", int(sample * 32767)))
         wav.writeframes(frames)
 
+async def generate_audio(line, path):
+    errors = []
+    try:
+        import edge_tts
+        for voice in EDGE_VOICES:
+            for attempt in range(2):
+                try:
+                    await edge_tts.Communicate(line, voice, rate="-4%", volume="+0%", pitch="+0Hz").save(str(path))
+                    if path.exists() and path.stat().st_size > 1000:
+                        return voice
+                except Exception as exc:
+                    errors.append(f"{voice} attempt {attempt + 1}: {exc}")
+                await asyncio.sleep(1.5)
+    except Exception as exc:
+        errors.append(f"edge-tts unavailable: {exc}")
+    try:
+        from gtts import gTTS
+        gTTS(text=line, lang="ar", slow=False).save(str(path))
+        if path.exists() and path.stat().st_size > 1000:
+            return "Google Arabic fallback"
+    except Exception as exc:
+        errors.append(f"gTTS fallback: {exc}")
+    raise RuntimeError("All Arabic TTS providers failed: " + " | ".join(errors[-4:]))
+
 async def main():
     lines = [x.strip() for x in SOURCE.read_text(encoding="utf-8").splitlines() if x.strip()]
     OUT.mkdir(parents=True, exist_ok=True)
@@ -33,13 +57,17 @@ async def main():
     make_tone(OUT / "tick.wav", [1250], 0.10, 0.08)
     make_tone(OUT / "alert.wav", [740, 520], 0.48, 0.12)
     durations = []
+    voices_used = set()
     for i, line in enumerate(lines, 1):
         path = OUT / f"scene-{i:02d}.mp3"
-        await edge_tts.Communicate(line, VOICE, rate="-4%", volume="+0%", pitch="+0Hz").save(str(path))
+        if path.exists():
+            path.unlink()
+        voice = await generate_audio(line, path)
+        voices_used.add(voice)
         seconds = MP3(path).info.length
         frames = max(60, int(seconds * FPS + 0.999) + 18)
         durations.append(frames)
-        print(f"Common Cold voice {i}/{len(lines)}: {seconds:.1f}s")
+        print(f"Common Cold voice {i}/{len(lines)}: {seconds:.1f}s ({voice})")
     data = "export const COLD_SCENE_DURATIONS = " + json.dumps(durations) + " as const;\n"
     data += "export const COLD_SCENE_NARRATION = " + json.dumps(lines, ensure_ascii=False) + " as const;\n"
     data += f"export const COLD_TOTAL_FRAMES = {sum(durations)};\n"
@@ -52,7 +80,7 @@ async def main():
         subs.append(f"{i}\n{stamp(cursor/FPS)} --> {stamp((cursor+frames)/FPS)}\n{line}")
         cursor += frames
     (ROOT/"public"/"common-cold-captions.srt").write_text("\n\n".join(subs)+"\n",encoding="utf-8")
-    print(f"Ready: {len(lines)} scenes, {sum(durations)/FPS:.1f}s, 60fps")
+    print(f"Ready: {len(lines)} scenes, {sum(durations)/FPS:.1f}s, 60fps; voices: {', '.join(sorted(voices_used))}")
 
 if __name__ == "__main__":
     asyncio.run(main())
