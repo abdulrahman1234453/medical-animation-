@@ -63,7 +63,7 @@ export const CommonCold:React.FC=()=>{
  const fade=interpolate(local,[0,16,duration-16,duration],[0,1,1,0],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const progress=(frame/COLD_SCENE_DURATIONS.reduce((a,b)=>a+b,0))*100;
  return <AbsoluteFill style={{background:C.bg,color:C.white,fontFamily:'Cairo, "Arial", sans-serif',overflow:'hidden'}}>
-  <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 32%, #12364B 0%, #061522 66%)'}}/>
+  <style>{'@import url(https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap);'}</style>\n  <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 32%, #12364B 0%, #061522 66%)'}}/>
   {Array.from({length:24},(_,i)=><div key={i} style={{position:'absolute',left:`${(i*37)%100}%`,top:`${(i*61)%100}%`,width:4+(i%3)*2,height:4+(i%3)*2,borderRadius:20,background:i%4===0?C.cyan:'#4B829B',opacity:.12+(i%4)*.035}}/>)}
   <div style={{position:'absolute',top:70,left:54,right:54,display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:21,fontWeight:800,letterSpacing:2,color:C.muted}}><span>MEDICAL MOTION LAB</span><span dir="rtl">تَثْقِيف طِبِّيّ</span></div>
   <div style={{position:'absolute',top:125,left:54,right:54,height:2,background:'#234254'}}/>
