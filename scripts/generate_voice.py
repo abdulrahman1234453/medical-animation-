@@ -51,9 +51,9 @@ async def main():
         await asyncio.sleep(0.2)
     total = sum(durations)
     timing_source = (
-        "export const SCENE_DURATIONS = " + json.dumps(durations, ensure_ascii=False) + " as const;\\n"
-        + "export const SCENE_NARRATION = " + json.dumps(lines, ensure_ascii=False) + " as const;\\n"
-        + f"export const TOTAL_DURATION_FRAMES = {total};\\n"
+        "export const SCENE_DURATIONS = " + json.dumps(durations, ensure_ascii=False) + " as const;\n"
+        + "export const SCENE_NARRATION = " + json.dumps(lines, ensure_ascii=False) + " as const;\n"
+        + f"export const TOTAL_DURATION_FRAMES = {total};\n"
     )
     TIMING_FILE.write_text(timing_source, encoding="utf-8")
     def stamp(seconds):
@@ -67,9 +67,9 @@ async def main():
     for index, (line, frames) in enumerate(zip(lines, durations), start=1):
         start = cursor / FPS
         end = (cursor + frames) / FPS
-        subtitles.append(f"{index}\\n{stamp(start)} --> {stamp(end)}\\n{line}")
+        subtitles.append(f"{index}\n{stamp(start)} --> {stamp(end)}\n{line}")
         cursor += frames
-    (ROOT / "public" / "captions-ar.srt").write_text("\\n\\n".join(subtitles) + "\\n", encoding="utf-8")
+    (ROOT / "public" / "captions-ar.srt").write_text("\n\n".join(subtitles) + "\n", encoding="utf-8")
     print(f"Generated 20 synced audio clips and subtitles. Total duration: {total / FPS:.1f}s")
 
 if __name__ == "__main__":
