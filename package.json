@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "remotion studio src/index.ts",
-    "voice": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip edge-tts && .venv/bin/python scripts/generate_voice.py",
+    "voice": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip edge-tts mutagen && .venv/bin/python scripts/generate_voice.py",
     "build": "npm run voice && remotion render src/index.ts BreastfeedingNewborn out/breastfeeding-newborn.mp4"
   },
   "dependencies": {
