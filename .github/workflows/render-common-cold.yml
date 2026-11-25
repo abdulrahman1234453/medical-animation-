@@ -1,0 +1,41 @@
+name: Render Common Cold Video
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install JavaScript dependencies
+        run: npm install
+      - name: Install voice generation dependencies
+        run: python -m pip install --upgrade edge-tts mutagen
+      - name: Generate Egyptian Arabic narration, captions and sound effects
+        run: python scripts/generate_common_cold.py
+      - name: Render 1080x1920 60fps MP4
+        run: npx remotion render src/index.ts CommonCold out/common-cold.mp4 --codec h264 --crf 18
+      - name: Upload finished video and subtitles
+        uses: actions/upload-artifact@v4
+        with:
+          name: common-cold-video
+          path: |
+            out/common-cold.mp4
+            public/common-cold-captions.srt
+          if-no-files-found: error
+          retention-days: 14
