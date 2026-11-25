@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "remotion studio src/index.ts",
-    "build": "remotion render src/index.ts NeonatalRespiratoryDistress out/neonatal-respiratory-distress.mp4"
+    "voice": "python3 -m pip install --user edge-tts && python3 scripts/generate_voice.py",
+    "build": "npm run voice && remotion render src/index.ts NeonatalRespiratoryDistress out/neonatal-respiratory-distress.mp4"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.300",
