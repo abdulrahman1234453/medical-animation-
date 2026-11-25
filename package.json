@@ -1,0 +1,21 @@
+{
+  "name": "neonatal-respiratory-distress-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "build": "remotion render src/index.ts NeonatalRespiratoryDistress out/neonatal-respiratory-distress.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.300",
+    "@remotion/transitions": "^4.0.300",
+    "remotion": "^4.0.300",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
