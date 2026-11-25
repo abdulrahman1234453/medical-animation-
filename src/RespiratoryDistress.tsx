@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 
 type Scene = {title:string; sub:string; kind:string; accent:string};
 const scenes:Scene[] = [
@@ -48,6 +48,7 @@ export const NeonatalRespiratoryDistress:React.FC=()=>{
  const frame=useCurrentFrame(); const {fps}=useVideoConfig();
  const sceneFrames=67.5; const overlap=7;
  return <AbsoluteFill style={{background:'#071827',fontFamily:'Arial, sans-serif',color:'#F4FAFD',overflow:'hidden'}}>
+  <Audio src={staticFile('narration-ar.mp3')} />
   <AbsoluteFill style={{background:'radial-gradient(ellipse at 50% 38%, #153B50 0%, #071827 68%)'}}/>
   <div style={{position:'absolute',top:70,left:64,right:64,display:'flex',justifyContent:'space-between',fontSize:24,letterSpacing:5,color:'#9DB9C8'}}><span>NEONATAL CARE</span><span>MEDICAL MOTION</span></div>
   {scenes.map((s,i)=>{
