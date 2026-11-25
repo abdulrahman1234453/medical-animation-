@@ -2,6 +2,11 @@ name: Render uploaded medical short
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/render-uploaded-medical-short.yml"
+      - "8231084510492384771.mp4"
+      - "new-video-project/**"
 
 permissions:
   contents: read
