@@ -48,7 +48,7 @@ const Art:React.FC<{kind:string;frame:number;danger?:boolean}> = ({kind,frame,da
 };
 
 const Scene:React.FC<{index:number;from:number;duration:number}> = ({index,from,duration})=>{
- const f=useCurrentFrame(), local=f-from, s=scenes[index];
+ const f=useCurrentFrame(), local=f, s=scenes[index];
  const fade=interpolate(local,[0,18,duration-18,duration],[0,1,1,0],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const zoom=interpolate(local,[0,duration],[.88,1.08],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const words=HYPERTENSION_NARRATION[index].split(/\s+/).filter(Boolean);
