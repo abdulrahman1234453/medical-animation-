@@ -1,0 +1,51 @@
+name: Render Hypertension Medical Reel
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/render-hypertension.yml'
+      - 'src/Hypertension.tsx'
+      - 'src/Root.tsx'
+      - 'scripts/generate_hypertension.py'
+      - 'NARRATION_HYPERTENSION_AR.txt'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install JavaScript dependencies
+        run: npm install
+      - name: Install Egyptian Arabic male voice
+        run: python -m pip install --upgrade edge-tts mutagen
+      - name: Generate narration and synchronized captions
+        run: python scripts/generate_hypertension.py
+      - name: Prepare output directory
+        run: mkdir -p out
+      - name: Render vertical 1080x1920 60fps MP4
+        run: npx remotion render src/index.ts Hypertension out/hypertension.mp4 --codec h264 --crf 18
+      - name: Upload finished video and subtitles
+        uses: actions/upload-artifact@v4
+        with:
+          name: hypertension-medical-reel
+          path: |
+            out/hypertension.mp4
+            public/hypertension-captions.srt
+          if-no-files-found: error
+          retention-days: 14
